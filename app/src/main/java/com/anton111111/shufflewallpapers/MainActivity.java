@@ -2,6 +2,7 @@ package com.anton111111.shufflewallpapers;
 
 import android.Manifest;
 import android.app.Activity;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +22,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.anton111111.Log;
+import com.anton111111.shufflewallpapers.fragment.ShuffleWallpaperFragment;
 import com.anton111111.shufflewallpapers.model.Photo;
 import com.anton111111.shufflewallpapers.task.GetRandomPhotoTask;
 import com.anton111111.utils.WallpaperUtil;
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int PICK_IMAGE = 1;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+    private ShuffleWallpaperFragment shuffleWallpaperFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +78,16 @@ public class MainActivity extends AppCompatActivity {
                 getRandomPhotoTask.execute();
             }
         });
+        showFragment();
+    }
 
+    private void showFragment() {
+        shuffleWallpaperFragment = ShuffleWallpaperFragment.newInstance();
+
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.fragment_holder, shuffleWallpaperFragment);
+        fragmentTransaction.commit();
     }
 
     private void showExplanation(String title,
