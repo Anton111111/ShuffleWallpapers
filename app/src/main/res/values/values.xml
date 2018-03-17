@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name" translatable="false">Shuffle Wallpapers - Unsplash</string>
+    <string name="user_agent" translatable="false">Shuffle Wallpapers App</string>
+</resources>
