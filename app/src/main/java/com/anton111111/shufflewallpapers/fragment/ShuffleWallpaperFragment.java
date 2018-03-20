@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.anton111111.shufflewallpapers.R;
-import com.anton111111.shufflewallpapers.model.Photo;
 import com.anton111111.shufflewallpapers.task.GetRandomPhotoTask;
+import com.anton111111.shufflewallpapers.view.ErrorOverlay;
 import com.anton111111.shufflewallpapers.view.ProgressBarOverlay;
 
 /**
@@ -18,8 +18,9 @@ import com.anton111111.shufflewallpapers.view.ProgressBarOverlay;
 public class ShuffleWallpaperFragment extends Fragment {
 
 
-    private ProgressBarOverlay mainProgressBarOverlay;
+    private ProgressBarOverlay mainProgressBarOverlayView;
     private GetRandomPhotoTask getRandomPhotoTask;
+    private ErrorOverlay errorOverlayView;
 
     public ShuffleWallpaperFragment() {
 
@@ -46,15 +47,24 @@ public class ShuffleWallpaperFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_shuffle_wallpaper, container, false);
-        mainProgressBarOverlay = view.findViewById(R.id.fragment_shuffle_wallpaper_main_progress_bar_overlay);
+        this.mainProgressBarOverlayView = view.findViewById(R.id.fragment_shuffle_wallpaper_main_progress_bar_overlay);
+        this.errorOverlayView = view.findViewById(R.id.fragment_shuffle_wallpaper_error_overlay);
+        errorOverlayView.setOnTryAgainBtnClickListener(() -> loadingRandomPhoto());
         loadingRandomPhoto();
         return view;
     }
 
     private void loadingRandomPhoto() {
+        mainProgressBarOverlayView.setVisibility(View.VISIBLE);
+        errorOverlayView.setVisibility(View.GONE);
         getRandomPhotoTask = new GetRandomPhotoTask(getContext());
         getRandomPhotoTask.setListener(photo -> {
-            mainProgressBarOverlay.setVisibility(View.GONE);
+            if (photo == null) {
+                errorOverlayView.setVisibility(View.VISIBLE);
+            } else {
+                errorOverlayView.setVisibility(View.GONE);
+            }
+            mainProgressBarOverlayView.setVisibility(View.GONE);
         });
         getRandomPhotoTask.execute();
     }
@@ -65,7 +75,6 @@ public class ShuffleWallpaperFragment extends Fragment {
             getRandomPhotoTask.cancel(true);
         }
         super.onDetach();
-
     }
 
 

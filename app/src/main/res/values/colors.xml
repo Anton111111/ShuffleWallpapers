@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="color_primary">#3F51B5</color>
+    <color name="color_primary_dark">#303F9F</color>
+    <color name="color_accent">#FF4081</color>
+    <color name="button_background">#FF4081</color>
+    <color name="button_text">#FFFFFF</color>
+
+
+    <!-- View Error Overlay -->
+    <color name="view_error_overlay_icon_tint">#FFB15252</color>
+    <color name="view_error_overlay_message_text">#FFB15252</color>
 </resources>

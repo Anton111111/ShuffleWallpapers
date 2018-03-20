@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="ErrorOverlay">
+        <attr name="eo_error_message" format="string" />
+        <attr name="eo_try_again_btn_visibility" format="boolean" />
+    </declare-styleable>
+</resources>

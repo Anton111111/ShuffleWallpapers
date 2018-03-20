@@ -8,7 +8,6 @@ import com.anton111111.shufflewallpapers.R;
 /**
  * @author Anton Potekhin (anton.potekhin@gmail.com)
  */
-
 public class ProgressBarOverlay extends RelativeLayout {
     public ProgressBarOverlay(Context context) {
         super(context);
