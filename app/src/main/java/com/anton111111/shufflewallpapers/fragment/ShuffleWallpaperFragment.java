@@ -5,22 +5,32 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
+import com.anton111111.Log;
 import com.anton111111.shufflewallpapers.R;
+import com.anton111111.shufflewallpapers.model.Photo;
 import com.anton111111.shufflewallpapers.task.GetRandomPhotoTask;
 import com.anton111111.shufflewallpapers.view.ErrorOverlay;
 import com.anton111111.shufflewallpapers.view.ProgressBarOverlay;
+import com.anton111111.shufflewallpapers.view.RemoteImageTouchView;
+import com.anton111111.utils.StringUtil;
+
+import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
+
 
 /**
  * Use the {@link ShuffleWallpaperFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShuffleWallpaperFragment extends Fragment {
+public class ShuffleWallpaperFragment extends Fragment implements RemoteImageTouchView.Listener {
 
 
     private ProgressBarOverlay mainProgressBarOverlayView;
     private GetRandomPhotoTask getRandomPhotoTask;
     private ErrorOverlay errorOverlayView;
+    private RelativeLayout rootView;
+    private RemoteImageTouchView imageView;
 
     public ShuffleWallpaperFragment() {
 
@@ -46,27 +56,64 @@ public class ShuffleWallpaperFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_shuffle_wallpaper, container, false);
-        this.mainProgressBarOverlayView = view.findViewById(R.id.fragment_shuffle_wallpaper_main_progress_bar_overlay);
-        this.errorOverlayView = view.findViewById(R.id.fragment_shuffle_wallpaper_error_overlay);
+        this.rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_shuffle_wallpaper, container, false);
+        this.mainProgressBarOverlayView = rootView.findViewById(R.id.fragment_shuffle_wallpaper_main_progress_bar_overlay);
+        this.errorOverlayView = new ErrorOverlay(getContext());
+        this.imageView = rootView.findViewById(R.id.fragment_shuffle_image);
+        this.imageView.setListener(this);
+        this.imageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_HEIGHT);
         errorOverlayView.setOnTryAgainBtnClickListener(() -> loadingRandomPhoto());
         loadingRandomPhoto();
-        return view;
+        return rootView;
     }
 
     private void loadingRandomPhoto() {
-        mainProgressBarOverlayView.setVisibility(View.VISIBLE);
-        errorOverlayView.setVisibility(View.GONE);
+        showMainProgressBar();
+        hideErrorOverlay();
         getRandomPhotoTask = new GetRandomPhotoTask(getContext());
         getRandomPhotoTask.setListener(photo -> {
-            if (photo == null) {
-                errorOverlayView.setVisibility(View.VISIBLE);
+            if (photo == null && photo.getUrls() != null &&
+                    !(photo.getUrls().containsKey(Photo.URL_CUSTOM) ||
+                            photo.getUrls().containsKey(Photo.URL_FULL))) {
+                showErrorOverlay();
             } else {
-                errorOverlayView.setVisibility(View.GONE);
+                hideErrorOverlay();
             }
-            mainProgressBarOverlayView.setVisibility(View.GONE);
+
+            String urlType = !StringUtil.isEmpty(photo.getUrls().get(Photo.URL_CUSTOM)) ?
+                    Photo.URL_CUSTOM : Photo.URL_FULL;
+            imageView.load(photo.getUrls().get(urlType));
         });
         getRandomPhotoTask.execute();
+    }
+
+    private void showErrorOverlay() {
+        rootView.addView(errorOverlayView);
+    }
+
+    private void hideErrorOverlay() {
+        rootView.removeView(errorOverlayView);
+    }
+
+    private void showMainProgressBar() {
+        mainProgressBarOverlayView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideMainProgressBar() {
+        mainProgressBarOverlayView.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public void onResourceReady() {
+        hideErrorOverlay();
+        hideMainProgressBar();
+    }
+
+    @Override
+    public void onLoadFailed() {
+        showErrorOverlay();
+        hideMainProgressBar();
     }
 
     @Override
@@ -76,6 +123,4 @@ public class ShuffleWallpaperFragment extends Fragment {
         }
         super.onDetach();
     }
-
-
 }

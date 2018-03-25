@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,8 +26,7 @@ public class ErrorOverlay extends RelativeLayout {
     }
 
     public ErrorOverlay(Context context) {
-        super(context);
-        initView();
+        this(context, null);
     }
 
     public ErrorOverlay(Context context, AttributeSet attrs) {
@@ -52,8 +52,11 @@ public class ErrorOverlay extends RelativeLayout {
 
     private void initView() {
         inflate(getContext(), R.layout.view_error_overlay, this);
+        final LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        this.setLayoutParams(lp);
         this.tryAgainBtnView = this.findViewById(R.id.view_error_overlay_try_again_btn);
-        this.errorMessageView = this.findViewById(R.id.view_error_overlay_try_again_btn);
+        this.errorMessageView = this.findViewById(R.id.view_error_overlay_message);
 
         errorMessageView.setText(errorMessage);
 

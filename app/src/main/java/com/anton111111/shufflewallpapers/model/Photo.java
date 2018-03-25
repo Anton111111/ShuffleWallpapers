@@ -12,6 +12,14 @@ import java.util.List;
 
 public class Photo implements Serializable {
 
+    public static final String URL_THUMB = "thumb";
+    public static final String URL_RAW = "raw";
+    public static final String URL_SMALL = "small";
+    public static final String URL_REGULAR = "regular";
+    public static final String URL_FULL = "full";
+    public static final String URL_CUSTOM = "custom";
+
+
     @SerializedName("id")
     private String id;
 

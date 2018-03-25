@@ -71,7 +71,6 @@ public class APIUnsplash extends APIAbstract {
         String url = getURL() + "photos/random";
 
         try {
-            Log.e("ExecuteRequest");
             String resultString = executeRequest(params, url);
             Photo photo = new GsonBuilder().create().fromJson(resultString, Photo.class);
             return photo;
