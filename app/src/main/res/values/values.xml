@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">Shuffle Wallpapers - Unsplash</string>
     <string name="user_agent" translatable="false">Shuffle Wallpapers App</string>
+    <string name="unsplash_client_id" translatable="false">8f445da2f55f814ff28cd2a0d18e8f8c778d8a53b18f0bc6706b3fe508b83ece</string>
 </resources>

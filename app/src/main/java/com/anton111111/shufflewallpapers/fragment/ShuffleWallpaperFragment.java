@@ -7,30 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.anton111111.Log;
 import com.anton111111.shufflewallpapers.R;
-import com.anton111111.shufflewallpapers.model.Photo;
-import com.anton111111.shufflewallpapers.task.GetRandomPhotoTask;
 import com.anton111111.shufflewallpapers.view.ErrorOverlay;
 import com.anton111111.shufflewallpapers.view.ProgressBarOverlay;
-import com.anton111111.shufflewallpapers.view.RemoteImageTouchView;
-import com.anton111111.utils.StringUtil;
-
-import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 
 
 /**
  * Use the {@link ShuffleWallpaperFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShuffleWallpaperFragment extends Fragment implements RemoteImageTouchView.Listener {
+public class ShuffleWallpaperFragment extends Fragment  {
 
 
     private ProgressBarOverlay mainProgressBarOverlayView;
-    private GetRandomPhotoTask getRandomPhotoTask;
     private ErrorOverlay errorOverlayView;
     private RelativeLayout rootView;
-    private RemoteImageTouchView imageView;
 
     public ShuffleWallpaperFragment() {
 
@@ -59,9 +50,6 @@ public class ShuffleWallpaperFragment extends Fragment implements RemoteImageTou
         this.rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_shuffle_wallpaper, container, false);
         this.mainProgressBarOverlayView = rootView.findViewById(R.id.fragment_shuffle_wallpaper_main_progress_bar_overlay);
         this.errorOverlayView = new ErrorOverlay(getContext());
-        this.imageView = rootView.findViewById(R.id.fragment_shuffle_image);
-        this.imageView.setListener(this);
-        this.imageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_HEIGHT);
         errorOverlayView.setOnTryAgainBtnClickListener(() -> loadingRandomPhoto());
         loadingRandomPhoto();
         return rootView;
@@ -70,21 +58,6 @@ public class ShuffleWallpaperFragment extends Fragment implements RemoteImageTou
     private void loadingRandomPhoto() {
         showMainProgressBar();
         hideErrorOverlay();
-        getRandomPhotoTask = new GetRandomPhotoTask(getContext());
-        getRandomPhotoTask.setListener(photo -> {
-            if (photo == null && photo.getUrls() != null &&
-                    !(photo.getUrls().containsKey(Photo.URL_CUSTOM) ||
-                            photo.getUrls().containsKey(Photo.URL_FULL))) {
-                showErrorOverlay();
-            } else {
-                hideErrorOverlay();
-            }
-
-            String urlType = !StringUtil.isEmpty(photo.getUrls().get(Photo.URL_CUSTOM)) ?
-                    Photo.URL_CUSTOM : Photo.URL_FULL;
-            imageView.load(photo.getUrls().get(urlType));
-        });
-        getRandomPhotoTask.execute();
     }
 
     private void showErrorOverlay() {
@@ -104,23 +77,10 @@ public class ShuffleWallpaperFragment extends Fragment implements RemoteImageTou
     }
 
 
-    @Override
-    public void onResourceReady() {
-        hideErrorOverlay();
-        hideMainProgressBar();
-    }
 
-    @Override
-    public void onLoadFailed() {
-        showErrorOverlay();
-        hideMainProgressBar();
-    }
 
     @Override
     public void onDetach() {
-        if (getRandomPhotoTask != null) {
-            getRandomPhotoTask.cancel(true);
-        }
         super.onDetach();
     }
 }
