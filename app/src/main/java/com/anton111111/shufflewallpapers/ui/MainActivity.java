@@ -1,15 +1,14 @@
-package com.anton111111.shufflewallpapers;
+package com.anton111111.shufflewallpapers.ui;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.anton111111.shufflewallpapers.fragment.ShuffleWallpaperFragment;
+import com.anton111111.shufflewallpapers.R;
+import com.anton111111.shufflewallpapers.ui.fragment.ShuffleWallpaperFragment;
 
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends Activity {
 
     private ShuffleWallpaperFragment shuffleWallpaperFragment;
 
@@ -22,12 +21,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void showFragment() {
         shuffleWallpaperFragment = ShuffleWallpaperFragment.newInstance();
-
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fragment_holder, shuffleWallpaperFragment);
         fragmentTransaction.commit();
     }
-
-
 }

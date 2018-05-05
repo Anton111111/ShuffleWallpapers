@@ -2,13 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.anton111111.shufflewallpapers.fragment.ShuffleWallpaperFragment">
-
-    <com.anton111111.shufflewallpapers.view.RemoteImageTouchView
-        android:id="@+id/fragment_shuffle_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+    tools:context=".ui.fragment.ShuffleWallpaperFragment">
 
     <com.anton111111.shufflewallpapers.view.ProgressBarOverlay
         android:id="@+id/fragment_shuffle_wallpaper_main_progress_bar_overlay"

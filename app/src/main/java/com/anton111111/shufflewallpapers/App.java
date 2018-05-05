@@ -1,20 +1,25 @@
 package com.anton111111.shufflewallpapers;
 
-import android.app.Application;
 
+import com.anton111111.Log;
+import com.anton111111.shufflewallpapers.di.DaggerAppComponent;
 import com.anton111111.shufflewallpapers.repository.PhotoRepository;
 
-public class App extends Application {
+import javax.inject.Inject;
 
-    public static PhotoRepository photoRepository;
+import dagger.android.AndroidInjector;
+import dagger.android.DaggerApplication;
+
+
+public class App extends DaggerApplication {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        photoRepository = new PhotoRepository(this);
     }
 
-    public static PhotoRepository getPhotoRepository() {
-        return photoRepository;
+    @Override
+    protected AndroidInjector<? extends App> applicationInjector() {
+        return DaggerAppComponent.builder().create(this);
     }
 }
